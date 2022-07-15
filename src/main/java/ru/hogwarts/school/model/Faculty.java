@@ -4,12 +4,12 @@ import java.util.Objects;
 
 public class Faculty {
 
-    private Long id;
+    private Long id = 0L;
     private String name;
     private String color;
 
-    public Faculty(Long id, String name, String color) {
-        this.id = id;
+    public Faculty(String name, String color) {
+        id++;
         this.name = name;
         this.color = color;
     }
