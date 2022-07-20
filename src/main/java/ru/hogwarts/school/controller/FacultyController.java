@@ -40,6 +40,16 @@ public class FacultyController {
         return ResponseEntity.ok(facultyTmp);
     }
 
+    @GetMapping("findByNameOrColor")
+    public ResponseEntity<Collection<Faculty>> findByNameOrColorBetween(@RequestParam(required = false) String name,
+                                                                        @RequestParam(required = false) String color) {
+        Collection<Faculty> facultyTmp = facultyService.findByNameOrColor(name, color);
+        if (facultyTmp.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(facultyTmp);
+    }
+
     @PostMapping
     public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) {
         Faculty facultyTmp = facultyService.createFaculty(faculty);
