@@ -2,48 +2,33 @@ package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.FacultyRepository;
 
-import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
 
-    private Map<Long, Faculty> facultyMap = new HashMap<>();
-    private Long generatedFacultyId = 0L;
+    private final FacultyRepository facultyRepository;
 
-    @PostConstruct
-    void init() {
-        ++generatedFacultyId;
-        Faculty faculty1 = new Faculty("Иван", "red");
-        faculty1.setId(generatedFacultyId);
-        facultyMap.put(generatedFacultyId, faculty1);
-
-        ++generatedFacultyId;
-        Faculty faculty2 = new Faculty("Петр", "green");
-        faculty2.setId(generatedFacultyId);
-        facultyMap.put(generatedFacultyId, faculty2);
-
-        ++generatedFacultyId;
-        Faculty faculty3 = new Faculty("Илья", "blue");
-        faculty3.setId(generatedFacultyId);
-        facultyMap.put(generatedFacultyId, faculty3);
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
     }
 
     public Faculty createFaculty(Faculty faculty) {
-        faculty.setId(++generatedFacultyId);
-        facultyMap.put(generatedFacultyId, faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     public Faculty getFaculty(Long facultyId) {
-        return facultyMap.get(facultyId);
+        return facultyRepository.findById(facultyId).get();
     }
 
     public Collection<Faculty> getAllFaculty() {
-        return facultyMap.values();
+        return facultyRepository.findAll();
     }
 
     public Collection<Faculty> getAllFacultyWhitColor(String color) {
@@ -53,17 +38,20 @@ public class FacultyService {
         return facultyList;
     }
 
-    public Faculty updateFaculty(Faculty faculty) {
-        if (facultyMap.containsKey(faculty.getId())) {
-            return facultyMap.put(faculty.getId(), faculty);
-        }
-        return null;
+    public Collection<Faculty> findByNameOrColor(String name, String color) {
+        Collection<Faculty> facultyList = facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
+        return facultyList;
     }
 
-    public Faculty deleteFaculty(Long facultyId) {
-        if (facultyMap.containsKey(facultyId)) {
-            return facultyMap.remove(facultyId);
-        }
-        return null;
+    public Set<String> findFacultyStudents(String faculty) {
+        return facultyRepository.findFacultyStudents(faculty);
+    }
+
+    public Faculty updateFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
+    }
+
+    public void deleteFaculty(Long facultyId) {
+        facultyRepository.deleteById(facultyId);
     }
 }

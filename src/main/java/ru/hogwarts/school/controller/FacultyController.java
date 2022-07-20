@@ -3,10 +3,10 @@ package ru.hogwarts.school.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.Set;
 
 @RestController
 @RequestMapping("faculty")
@@ -41,6 +41,21 @@ public class FacultyController {
         return ResponseEntity.ok(facultyTmp);
     }
 
+    @GetMapping("findByNameOrColor")
+    public ResponseEntity<Collection<Faculty>> findByNameOrColorBetween(@RequestParam(required = false) String name,
+                                                                        @RequestParam(required = false) String color) {
+        Collection<Faculty> facultyTmp = facultyService.findByNameOrColor(name, color);
+        if (facultyTmp.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(facultyTmp);
+    }
+
+    @GetMapping("findFacultyStudents/{faculty}")
+    public Set<String> findByFacultyOfStudent(@PathVariable String faculty) {
+        return facultyService.findFacultyStudents(faculty);
+    }
+
     @PostMapping
     public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) {
         Faculty facultyTmp = facultyService.createFaculty(faculty);
@@ -58,10 +73,7 @@ public class FacultyController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
-        Faculty facultyTmp = facultyService.deleteFaculty(id);
-        if (facultyTmp == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(facultyTmp);
+        facultyService.deleteFaculty(id);
+        return ResponseEntity.ok().build();
     }
 }
