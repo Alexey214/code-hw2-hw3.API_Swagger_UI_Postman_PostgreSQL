@@ -53,9 +53,9 @@ public class StudentController {
         return ResponseEntity.ok(studentTmp);
     }
 
-    @GetMapping("facultyOfStudent/{partName}")
-    public String findByFacultyOfStudent(@PathVariable String partName) {
-        return studentService.findByFacultyOfStudent(partName);
+    @GetMapping("facultyOfStudent/{name}")
+    public String findByFacultyOfStudent(@PathVariable String name) {
+        return studentService.findByFacultyOfStudent(name);
     }
 
     @PostMapping

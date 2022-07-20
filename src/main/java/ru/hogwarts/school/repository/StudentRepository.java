@@ -10,7 +10,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Collection<Student> findByAgeBetween(int min, int max);
 
-    @Query("select f.name from student as s, faculty as f where s.faculty_id = f.id and s.name like ?")
-    Student findByFaculty(String partName);
+    @Query("SELECT f.name FROM Student AS s, Faculty AS f WHERE s.faculty.id = f.id AND s.name LIKE ?1")
+    String findByFaculty(String name);
 
 }

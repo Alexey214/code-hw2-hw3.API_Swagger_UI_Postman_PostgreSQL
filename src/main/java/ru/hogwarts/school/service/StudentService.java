@@ -43,10 +43,8 @@ public class StudentService {
         return studentList;
     }
 
-    public String findByFacultyOfStudent(String partName) {
-        String studentTmp = studentRepository.findByFaculty(partName).toString();
-
-        return studentTmp;
+    public String findByFacultyOfStudent(String name) {
+        return studentRepository.findByFaculty(name);
     }
 
     public Student updateStudent(Student student) {

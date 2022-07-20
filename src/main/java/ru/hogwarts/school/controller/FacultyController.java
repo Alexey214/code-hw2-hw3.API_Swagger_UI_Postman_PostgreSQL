@@ -6,6 +6,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.Set;
 
 @RestController
 @RequestMapping("faculty")
@@ -48,6 +49,11 @@ public class FacultyController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(facultyTmp);
+    }
+
+    @GetMapping("findFacultyStudents/{faculty}")
+    public Set<String> findByFacultyOfStudent(@PathVariable String faculty) {
+        return facultyService.findFacultyStudents(faculty);
     }
 
     @PostMapping
